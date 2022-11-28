@@ -1,5 +1,35 @@
 // Write your types here! ✨
 
+// Discriminated type unions make it possible to differentiate between shapes using a property
+// (An example below of a discriminating property is status)
+// Using discriminated type unions (type StatusMotion being one for example) are very useful in narrowing types using conditions
+type BaseMotion = { from: "defendant" | "plaintiff"; reason: string };
+type AllowedMotion = BaseMotion & {
+	status: "allowed";
+	deliberationHours: number;
+};
+type DeniedMotion = BaseMotion & {
+	status: "denied";
+	annoyedJustice: boolean;
+	deliberationHours: number;
+};
+type PendingMotion = BaseMotion & {
+	status: "pending";
+	estimatedDeliberationHours: number;
+};
+type StatusMotion = AllowedMotion | DeniedMotion | PendingMotion;
+
+type PreTrialMotion = {
+	classification: "dismiss" | "suppress" | "venue";
+	step: "pre-trial";
+} & StatusMotion;
+type PostTrialMotion = {
+	classification: "acquittal" | "correction" | "new trial";
+	step: "post-trial";
+} & StatusMotion;
+
+type Motion = PostTrialMotion | PreTrialMotion;
+
 export const motions: Motion[] = [
 	{
 		annoyedJustice: true,
